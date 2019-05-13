@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>sspanel节点一键对接命令生成器</title>
+        <style type="text/css">
+        <!--
+            body {
+                color:#333333;
+                font-family:"Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+            }
+            .links {color: #009900}
+            #main {
+                margin-top: 50px;
+                margin-right: auto;
+                margin-left: auto;
+                width: 80%;
+            }
+        -->
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <div>
+                <p><b>==========通用参数==========</b></p>
+                <div>
+                <label><b>INTERFACE</b></label>
+                    <select name="INTERFACE" id="INTERFACE" onchange="change_INTERFACE()">
+                        <option value="1"  selected="">modwebapi</option>
+                        <option value="2">glzjinmod</option>
+                    </select>
+                </div>
+
+                <div>
+        		<label><b>NODE_ID</b></label>
+                    <input name="NODE_ID" id="NODE_ID">
+                    <a>(可以不填，在执行脚本时输入)</a><br>
+                </div>
+                <div>
+                <label><b>SPEEDTEST</b></label>
+                    <input name="SPEEDTEST" id="SPEEDTEST" value="6">
+                </div>
+
+                <div>
+                <label><b>CLOUDSAFE</b></label>
+                    <input name="CLOUDSAFE" id="CLOUDSAFE" value="1">
+                </div>
+
+                <div>
+                <label><b>ANTISSATTACK</b></label>
+                    <input name="ANTISSATTACK" id="ANTISSATTACK" value="0">
+                </div>
+
+                <div>
+                <label><b>AUTOEXEC</b></label>
+                    <input name="AUTOEXEC" id="AUTOEXEC" value="0">
+                </div>
+
+                <div>
+                <label><b>MU_SUFFIX</b></label>
+                    <input name="MU_SUFFIX" id="MU_SUFFIX" value="zhaoj.in">
+                </div>
+
+                <div>
+                <label><b>MU_REGEX</b></label>
+                    <input name="MU_REGEX" id="MU_REGEX" value="%5m%id.%suffix">
+                </div>
+
+                <div>
+                <label><b>RESTART</b></label>
+                    <input name="RESTART" id="RESTART">
+                <a>（每天几点重启节点，不填则不重启）</a><br>
+                </div>
+
+                <div id='API_mode'>
+                    <p><b>==========API模式参数==========</b></p>
+                    <div>
+                    <label><b>WEBAPI_URL</b></label>
+                        <input name="WEBAPI_URL" id="WEBAPI_URL">
+                    </div>
+
+                    <div>
+                    <label><b>WEBAPI_TOKEN</b></label>
+                        <input name="WEBAPI_TOKEN" id="WEBAPI_TOKEN">
+                    </div>
+                </div>
+
+                <div id='DB_mode' style="display: none;">
+                    <p><b>==========DB模式参数==========</b></p>
+                    <div>
+                    <label><b>MYSQL_HOST</b></label>
+                        <input name="MYSQL_HOST" id="MYSQL_HOST">
+                    </div>
+
+                    <div>
+                    <label><b>MYSQL_PORT</b></label>
+                        <input name="MYSQL_PORT" id="MYSQL_PORT" value="3306">
+                    </div>
+
+                    <div>
+                    <label><b>MYSQL_USER</b></label>
+                        <input name="MYSQL_USER" id="MYSQL_USER">
+                    </div>
+
+                    <div>
+                    <label><b>MYSQL_PASS</b></label>
+                        <input name="MYSQL_PASS" id="MYSQL_PASS">
+                    </div>
+
+                    <div>
+                    <label><b>MYSQL_DB</b></label>
+                        <input name="MYSQL_DB" id="MYSQL_DB">
+                    </div>
+                </div>
+
+                <p><b>==========分割线=========</b></p>
+
+                <div>
+                <label><b>请选择操作系统</b></label>
+                    <select name="OS" id="OS">
+                        <option value="1"  selected="">CentOS</option>
+                        <option value="2">Debian/Ubuntu</option>
+                    </select>
+
+                <div>
+                    <button type="button" id="button">生成</button>
+                </div>
+                <div>
+                    <label>无人值守安装命令：</label>
+                    <p>
+                        <a id="screen"></a><br>
+                        <a id="result"></a>
+                    </p>
+                </div>
+            </div> 
+        </div>
+    </body>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $("button").click(function(){
+        INTERFACE = $('#INTERFACE').val();
+        RESTART = $('#RESTART').val();
+        if (RESTART == '') {
+            RESTART='n';
+        }
+
+        var result = '';
+        result = result+"wget -N --no-check-certificate https://raw.githubusercontent.com/dump0/node.sh/master/node.sh && chmod +x node.sh && ";
+        result = result+"Auto_Install=\"y\" ";
+        result = result+"INTERFACE=\""+INTERFACE+"\" ";
+        if (NODE_ID != '') {
+            result = result+"NODE_ID=\""+$("#NODE_ID").val()+"\" ";
+        }
+        result = result+"SPEEDTEST=\""+$("#SPEEDTEST").val()+"\" ";
+        result = result+"CLOUDSAFE=\""+$("#CLOUDSAFE").val()+"\" ";
+        result = result+"ANTISSATTACK=\""+$("#ANTISSATTACK").val()+"\" ";
+        result = result+"AUTOEXEC=\""+$("#AUTOEXEC").val()+"\" ";
+        result = result+"MU_SUFFIX=\""+$("#MU_SUFFIX").val()+"\" ";
+        result = result+"MU_REGEX=\""+$("#MU_REGEX").val()+"\" ";
+        result = result+"Restart=\""+$("#RESTART").val()+"\" ";
+
+        if (INTERFACE == '1') {
+            WEBAPI_URL = $('#WEBAPI_URL').val();
+            WEBAPI_TOKEN = $('#WEBAPI_TOKEN').val();
+            if (WEBAPI_URL == '') {
+                alert('请填写WEBAPI_URL');
+                return;
+            }
+            if (WEBAPI_TOKEN == '') {
+                alert('请填写WEBAPI_TOKEN');
+                return;
+            }
+            result = result+"WEBAPI_URL=\""+WEBAPI_URL+"\" ";
+            result = result+"WEBAPI_TOKEN=\""+WEBAPI_TOKEN+"\" ";
+        } else {
+            MYSQL_HOST = $('#MYSQL_HOST').val();
+            MYSQL_PORT = $('#MYSQL_PORT').val();
+            MYSQL_USER = $('#MYSQL_USER').val();
+            MYSQL_PASS = $('#MYSQL_PASS').val();
+            MYSQL_DB = $('#MYSQL_DB').val();
+            if (MYSQL_HOST == '') {
+                alert('请填写MYSQL_HOST');
+                return;
+            }
+            if (MYSQL_PORT == '') {
+                alert('请填写MYSQL_PORT');
+                return;
+            }
+            if (MYSQL_USER == '') {
+                alert('请填写MYSQL_USER');
+                return;
+            }
+            if (MYSQL_PASS == '') {
+                alert('请填写MYSQL_PASS');
+                return;
+            }
+            if (MYSQL_DB == '') {
+                alert('请填写MYSQL_DB');
+                return;
+            }
+            result = result+"MYSQL_HOST=\""+MYSQL_HOST+"\" ";
+            result = result+"MYSQL_PORT=\""+MYSQL_PORT+"\" ";
+            result = result+"MYSQL_USER=\""+MYSQL_USER+"\" ";
+            result = result+"MYSQL_PASS=\""+MYSQL_PASS+"\" ";
+            result = result+"MYSQL_DB=\""+MYSQL_DB+"\" ";
+        }
+
+        result = result+" ./node.sh";
+
+        if ($("#OS").val() == 1) {
+            var screen = "yum install wget screen -y && screen -S node";
+        } else {
+            var screen = 'apt install wget screen -y && screen -S node\n';
+        }
+        $("#screen").text(screen);
+        $("#result").text(result);
+      });
+    });
+    </script>
+    <script>
+        function change_INTERFACE(){
+            if ($('#INTERFACE').val() == '1') {
+                $('#API_mode').show();
+                $('#DB_mode').hide();
+            } else {
+                $('#API_mode').hide();
+                $('#DB_mode').show();
+            }
+        }
+    </script>
+</html>

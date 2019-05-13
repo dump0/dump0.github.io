@@ -141,6 +141,7 @@
     $(document).ready(function(){
       $("button").click(function(){
         INTERFACE = $('#INTERFACE').val();
+        NODE_ID = $('#NODE_ID').val();
         RESTART = $('#RESTART').val();
         if (RESTART == '') {
             RESTART='n';
@@ -151,7 +152,7 @@
         result = result+"Auto_Install=\"y\" ";
         result = result+"INTERFACE=\""+INTERFACE+"\" ";
         if (NODE_ID != '') {
-            result = result+"NODE_ID=\""+$("#NODE_ID").val()+"\" ";
+            result = result+"NODE_ID=\""+NODE_ID+"\" ";
         }
         result = result+"SPEEDTEST=\""+$("#SPEEDTEST").val()+"\" ";
         result = result+"CLOUDSAFE=\""+$("#CLOUDSAFE").val()+"\" ";

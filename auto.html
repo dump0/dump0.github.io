@@ -36,6 +36,13 @@
                     <input name="NODE_ID" id="NODE_ID">
                     <a>(可以不填，在执行脚本时输入)</a><br>
                 </div>
+
+                <div>
+                <label><b>RESTART</b></label>
+                    <input name="RESTART" id="RESTART">
+                <a>（每天几点重启节点，不填则不重启）</a><br>
+                </div>
+                
                 <div>
                 <label><b>SPEEDTEST</b></label>
                     <input name="SPEEDTEST" id="SPEEDTEST" value="6">
@@ -64,12 +71,6 @@
                 <div>
                 <label><b>MU_REGEX</b></label>
                     <input name="MU_REGEX" id="MU_REGEX" value="%5m%id.%suffix">
-                </div>
-
-                <div>
-                <label><b>RESTART</b></label>
-                    <input name="RESTART" id="RESTART">
-                <a>（每天几点重启节点，不填则不重启）</a><br>
                 </div>
 
                 <div id='API_mode'>
@@ -143,9 +144,6 @@
         INTERFACE = $('#INTERFACE').val();
         NODE_ID = $('#NODE_ID').val();
         RESTART = $('#RESTART').val();
-        if (RESTART == '') {
-            RESTART='n';
-        }
 
         var result = '';
         result = result+"wget -N --no-check-certificate https://raw.githubusercontent.com/dump0/node.sh/master/node.sh && chmod +x node.sh && ";
@@ -154,13 +152,15 @@
         if (NODE_ID != '') {
             result = result+"NODE_ID=\""+NODE_ID+"\" ";
         }
+        if (RESTART != '') {
+            result = result+"RESTART=\""+RESTART+"\" ";
+        }
         result = result+"SPEEDTEST=\""+$("#SPEEDTEST").val()+"\" ";
         result = result+"CLOUDSAFE=\""+$("#CLOUDSAFE").val()+"\" ";
         result = result+"ANTISSATTACK=\""+$("#ANTISSATTACK").val()+"\" ";
         result = result+"AUTOEXEC=\""+$("#AUTOEXEC").val()+"\" ";
         result = result+"MU_SUFFIX=\""+$("#MU_SUFFIX").val()+"\" ";
         result = result+"MU_REGEX=\""+$("#MU_REGEX").val()+"\" ";
-        result = result+"Restart=\""+RESTART+"\" ";
 
         if (INTERFACE == '1') {
             WEBAPI_URL = $('#WEBAPI_URL').val();

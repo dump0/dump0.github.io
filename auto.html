@@ -152,9 +152,10 @@
         if (NODE_ID != '') {
             result = result+"NODE_ID=\""+NODE_ID+"\" ";
         }
-        if (RESTART != '') {
-            result = result+"RESTART=\""+RESTART+"\" ";
+        if (RESTART == '') {
+            RESTART = 'n';
         }
+        result = result+"RESTART=\""+RESTART+"\" ";
         result = result+"SPEEDTEST=\""+$("#SPEEDTEST").val()+"\" ";
         result = result+"CLOUDSAFE=\""+$("#CLOUDSAFE").val()+"\" ";
         result = result+"ANTISSATTACK=\""+$("#ANTISSATTACK").val()+"\" ";

@@ -44,6 +44,14 @@
                 </div>
                 
                 <div>
+                <label><b>BBR</b></label>
+                    <select name="BBR" id="BBR">
+                        <option value="0"  selected="">不安装BBR</option>
+                        <option value="1">原版BBR</option>
+                    </select>
+                </div>
+                
+                <div>
                 <label><b>SPEEDTEST</b></label>
                     <input name="SPEEDTEST" id="SPEEDTEST" value="6">
                 </div>
@@ -156,6 +164,7 @@
             RESTART = 'n';
         }
         result = result+"RESTART=\""+RESTART+"\" ";
+        result = result+"BBR=\""+$("#BBR").val()+"\" ";
         result = result+"SPEEDTEST=\""+$("#SPEEDTEST").val()+"\" ";
         result = result+"CLOUDSAFE=\""+$("#CLOUDSAFE").val()+"\" ";
         result = result+"ANTISSATTACK=\""+$("#ANTISSATTACK").val()+"\" ";
